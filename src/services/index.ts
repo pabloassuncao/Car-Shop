@@ -14,7 +14,10 @@ abstract class Service<T> {
     }
   }
 
-  abstract create(obj: T): Promise<T | null>;
+  public async create(obj: T): Promise<T | null> {
+    const res = await this.model.create(obj);
+    return res;
+  }
 
   public async read(): Promise<T[]> {
     const res = await this.model.read();
@@ -44,7 +47,12 @@ abstract class Service<T> {
     return res;
   }
 
-  abstract delete(id: string): Promise<T | null>;
+  public async delete(id: string): Promise<T | null> {
+    Service.idChecker(id);
+    await this.readOne(id);
+    const res = await this.model.delete(id);
+    return res;
+  }
 }
 
 export default Service;
