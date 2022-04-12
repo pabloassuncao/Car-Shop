@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import Service from '../services';
-import { HttpStatus } from '../utils';
 
 export interface RequestWithBody<T> extends Request {
   body: T;
@@ -16,22 +15,22 @@ abstract class Controller<T> {
     res: Response<T>,
   ): Promise<typeof res | void>;
 
-  async read(
+  read = async (
     _req: Request,
     res: Response<T[]>,
-  ): Promise<typeof res> {
+  ): Promise<typeof res> => {
     const objs = await this.service.read();
-    return res.status(HttpStatus.OK).json(objs);
-  }
+    return res.status(200).json(objs);
+  };
 
-  async readOne(
+  readOne = async (
     req: Request<{ id: string; }>,
     res: Response<T>,
-  ): Promise<typeof res | void> {
+  ): Promise<typeof res> => {
     const { id } = req.params;
-    const objs = await this.service.readOne(id);
-    return res.status(HttpStatus.OK).json(objs).end();
-  }
+    const obj = await this.service.readOne(id);
+    return res.status(200).json(obj);
+  };
 
   abstract update(
     req: RequestWithBody<T>,

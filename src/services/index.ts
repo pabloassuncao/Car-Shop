@@ -8,6 +8,12 @@ export interface ServiceError {
 abstract class Service<T> {
   constructor(protected model: Model<T>) { }
 
+  protected static idChecker(id: string): void {
+    if (id.length < 24) {
+      throw new Err('BAD_REQUEST', ErrMsg.LowID);
+    }
+  }
+
   abstract create(obj: T): Promise<T | null>;
 
   public async read(): Promise<T[]> {
@@ -16,6 +22,10 @@ abstract class Service<T> {
   }
 
   public async readOne(id: string): Promise<T> {
+    if (id.length < 24) {
+      throw new Err('BAD_REQUEST', ErrMsg.LowID);
+    }
+
     const res = await this.model.readOne(id);
     if (!res) {
       throw new Err('NOT_FOUND', ErrMsg.ObjNotFound);
@@ -24,18 +34,17 @@ abstract class Service<T> {
   }
 
   public async update(id: string, obj: T): Promise<T | null> {
+    Service.idChecker(id);
+
     const res = await this.model.update(id, obj);
+
     if (!res) {
       throw new Err('NOT_FOUND', ErrMsg.ObjNotFound);
     }
     return res;
   }
 
-  public async delete(id: string): Promise<T | null> {
-    await this.model.readOne(id);
-    const res = await this.model.delete(id);
-    return res;
-  }
+  abstract delete(id: string): Promise<T | null>;
 }
 
 export default Service;

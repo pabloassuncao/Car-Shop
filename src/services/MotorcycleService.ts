@@ -12,13 +12,9 @@ class MotorcycleService extends Service<Motorcycle> {
     return res;
   }
 
-  public async read(): Promise<Motorcycle[]> {
-    const res = await this.model.read();
-    return res;
-  }
-
   public async delete(id: string): Promise<Motorcycle | null> {
-    await this.model.readOne(id);
+    MotorcycleService.idChecker(id);
+    await this.readOne(id);
     const res = await this.model.delete(id);
     return res;
   }

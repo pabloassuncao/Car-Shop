@@ -12,13 +12,9 @@ class CarService extends Service<Car> {
     return res;
   }
 
-  public async read(): Promise<Car[]> {
-    const res = await this.model.read();
-    return res;
-  }
-
   public async delete(id: string): Promise<Car | null> {
-    await this.model.readOne(id);
+    CarService.idChecker(id);
+    await this.readOne(id);
     const res = await this.model.delete(id);
     return res;
   }

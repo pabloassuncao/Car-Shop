@@ -5,7 +5,7 @@ import {
   Motorcycle,
   MotorcycleSchema,
 } from '../interfaces/MotorcycleInterface';
-import { Err, HttpStatus, Routes, ErrMsg } from '../utils';
+import { Err, HttpStatus, Routes } from '../utils';
 
 export default class MotorcycleController extends Controller<Motorcycle> {
   private $route: string;
@@ -20,53 +20,29 @@ export default class MotorcycleController extends Controller<Motorcycle> {
 
   get route() { return this.$route; }
 
+  private static parseChecker(body: object): void {
+    const parsed = MotorcycleSchema.safeParse(body);
+  
+    if (!parsed.success) {
+      throw new Err('BAD_REQUEST', parsed.error.message);
+    }
+  }
+
   create = async (
     req: RequestWithBody<Motorcycle>,
     res: Response<Motorcycle | null>,
   ): Promise<typeof res> => {
-    const parsed = MotorcycleSchema.safeParse(req.body);
-    if (!parsed.success) {
-      throw new Err('BAD_REQUEST', parsed.error.message);
-    }
+    MotorcycleController.parseChecker(req.body);
     const result = await this.service.create(req.body);
     console.log(result?.status);
     return res.status(201).json(result);
-  };
-
-  readOne = async (
-    req: Request<{ id: string; }>,
-    res: Response<Motorcycle>,
-  ): Promise<typeof res> => {
-    if (req.params.id.length < 24) {
-      throw new Err('BAD_REQUEST', ErrMsg.LowID);
-    }
-
-    const obj = await this.service.readOne(req.params.id);
-    return res.status(200).json(obj);
-  };
-
-  read = async (
-    _req: Request,
-    res: Response<Motorcycle[]>,
-  ): Promise<typeof res> => {
-    const objs = await this.service.read();
-    return res.status(200).json(objs);
   };
 
   update = async (
     req: RequestWithBody<Motorcycle>,
     res: Response<Motorcycle>,
   ): Promise<typeof res> => {
-    if (req.params.id.length < 24) {
-      throw new Err('BAD_REQUEST', ErrMsg.LowID);
-    }
-
-    const parsed = MotorcycleSchema.safeParse(req.body);
-  
-    if (!parsed.success) {
-      throw new Err('UNAUTHORIZED', parsed.error.message);
-    }
-
+    MotorcycleController.parseChecker(req.body);
     await this.service.update(req.params.id, req.body);
     return res.status(200).json(req.body);
   };
@@ -75,9 +51,6 @@ export default class MotorcycleController extends Controller<Motorcycle> {
     req: Request<{ id: string; }>,
     res: Response<Motorcycle>,
   ): Promise<typeof res> => {
-    if (req.params.id.length < 24) {
-      throw new Err('BAD_REQUEST', ErrMsg.LowID);
-    }
     await this.service.delete(req.params.id);
     return res.status(HttpStatus.OK_NO_CONTENT).json();
   };
