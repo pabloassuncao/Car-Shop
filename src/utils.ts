@@ -66,4 +66,5 @@ export const ERR_CODES: ErrList = {
 // Routes
 export enum Routes {
   CARS = '/cars',
+  MOTORCYCLE = '/motorcycles',
 }
