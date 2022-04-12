@@ -11,7 +11,7 @@ export default function ErrorHandler(
   console.log('ERROOOOOOO', status, err);
 
   if (status) {
-    return res.status(+status).json({ message: err.message }).end();
+    return res.status(+status).json({ error: err.message }).end();
   }
 
   return next(err);

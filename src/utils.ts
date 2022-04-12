@@ -15,6 +15,11 @@ export interface ErrList {
   readonly 'number.base': number,
 }
 
+export enum ErrMsg {
+  LowID = 'Id must have 24 hexadecimal characters',
+  ObjNotFound = 'Object not found',
+}
+
 export class Err extends Error {
   code: keyof ErrList;
 

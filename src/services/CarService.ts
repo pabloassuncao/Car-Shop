@@ -11,6 +11,17 @@ class CarService extends Service<Car> {
     const res = await this.model.create(obj);
     return res;
   }
+
+  public async read(): Promise<Car[]> {
+    const res = await this.model.read();
+    return res;
+  }
+
+  public async delete(id: string): Promise<Car | null> {
+    await this.model.readOne(id);
+    const res = await this.model.delete(id);
+    return res;
+  }
 }
 
 export default CarService;

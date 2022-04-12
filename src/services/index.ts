@@ -1,6 +1,6 @@
 import { ZodError } from 'zod';
 import { Model } from '../interfaces/ModelInterface';
-import { Err } from '../utils';
+import { Err, ErrMsg } from '../utils';
 
 export interface ServiceError {
   error: ZodError;
@@ -18,13 +18,16 @@ abstract class Service<T> {
   public async readOne(id: string): Promise<T> {
     const res = await this.model.readOne(id);
     if (!res) {
-      throw new Err('UNAUTHORIZED', 'Car not found');
+      throw new Err('NOT_FOUND', ErrMsg.ObjNotFound);
     }
     return res;
   }
 
   public async update(id: string, obj: T): Promise<T | null> {
     const res = await this.model.update(id, obj);
+    if (!res) {
+      throw new Err('NOT_FOUND', ErrMsg.ObjNotFound);
+    }
     return res;
   }
 
