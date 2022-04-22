@@ -16,7 +16,7 @@ Basta na pasta geral do projeto dar um `npm install` e em seguida um `npm run de
 Retorna um array com os carros e seus ID's com status 200, exemplo:
 ```json
 [
-	{
+  {
     "_id": "4edd40c86762e0fb12000003",
     "model": "Ferrari Maranello",
     "year": 1967,
@@ -34,7 +34,7 @@ Retorna um array com os carros e seus ID's com status 200, exemplo:
     "seatsQty": 2,
     "doorsQty": 2
   }
-	...
+  ...
 ]
 ```
 
@@ -117,7 +117,7 @@ Apaga o carro pelo id com status 204.
 Retorna um array com as motos e seus ID's com status 200, exemplo:
 ```json
 [
-	{
+  {
     "_id": "4edd40c86762e0fb12000003",
     "model": "Honda CG Titan 125",
     "year": 2003,
@@ -135,7 +135,7 @@ Retorna um array com as motos e seus ID's com status 200, exemplo:
     "category": "Street",
     "engineCapacity": 2000,
   },
-	...
+  ...
 ]
 ```
 
